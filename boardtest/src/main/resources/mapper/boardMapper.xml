@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.boardtest.webapp.dao.BoardDAO">
+	<insert id="boardInsert" parameterType="com.boardtest.webapp.vo.BoardVO">
+		insert into boardprac(boardNo, subject, content, userid, password) 
+		values(testsq.nextval, #{subject}, #{content}, #{userid}, #{password})
+	</insert>
+	<select id="getList" parameterType="com.boardtest.webapp.vo.PageVO" resultType="com.boardtest.webapp.vo.BoardVO">
+		select * from
+		    (select * from
+		        (select * from 
+		            (select boardNo, subject, content, userid, hit, to_char(writedate, 'YYYY-DD-MM') writedate from boardprac order by boardNo desc)
+		        <if test="searchKey != null and searchKey != '' and searchWord != null and searchWord != ''"> where ${searchKey} like '%${searchWord}%'</if>)
+		    where <![CDATA[rownum <=]]>${currentPageNum * onePageRecord} order by boardNo asc)
+		where <![CDATA[rownum <=]]>
+		<if test="currentPageNum==totalPage">${lastPageRecord}</if>
+		<if test="currentPageNum!=totalPage">${onePageRecord}</if>
+		order by boardNo desc
+	</select>
+	<select id="getTotalRecord" parameterType="com.boardtest.webapp.vo.PageVO" resultType="int">
+		select count(boardNo) totalRecord from boardprac
+		<if test="searchKey != null and searchWord != '' and searchWord != null and searchWord != ''">
+			where ${searchKey} like '%${searchWord}%'
+		</if>
+	</select>
+	<select id="getSelectedRecord" resultType="com.boardtest.webapp.vo.BoardVO">
+		select boardNo, subject, content, userid, password, hit, filename, writedate from boardprac
+		where boardNo = ${param1}
+	</select>
+	<select id="getPassword" resultType="String">
+		select password from boardprac where boardNo=${param1}
+	</select>
+	<update id="boardEdit" parameterType="com.boardtest.webapp.vo.BoardVO">
+		update boardprac set subject=#{subject}, content=#{content}, userid=#{userid}, password=#{password} where boardNo=${boardNo}
+	</update>
+	<delete id="boardDelete">
+		delete from boardprac where boardNo=${param1}
+	</delete>
+	<update id="updateHit">
+		update boardprac set hit = hit+1 where boardNo=${param1}
+	</update>
+</mapper>
