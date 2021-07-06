@@ -31,11 +31,11 @@
 			subjectWordCount(obj, wordcheck);
 		}
 		//복붙했을때
-		subject.oncut = subject.oncopy = subject.onpaste = function(){
-			var obj = $("#subject");
-			var wordcheck = $("#subjectWord");
-			subjectWordCount(obj, wordcheck);
-		}
+// 		subject.oncut = subject.oncopy = subject.onpaste = function(){
+// 			var obj = $("#subject");
+// 			var wordcheck = $("#subjectWord");
+// 			subjectWordCount(obj, wordcheck);
+// 		}
 		//작성자 글자수 보여주기---------------
 		//눌릴때 보여주기
 		userid.oninput = function(){
@@ -45,42 +45,52 @@
 			subjectWordCount(obj, wordcheck);
 		}
 		//복붙할때
-		userid.oncut = userid.oncopy = userid.onpaste = function(){
-			var obj = $("#userid");
-			var wordcheck = $("#idWord");
-			checkblank(obj, '작성자')
-			subjectWordCount(obj, wordcheck);
-		}
+// 		userid.oncut = userid.oncopy = userid.onpaste = function(){
+// 			var obj = $("#userid");
+// 			var wordcheck = $("#idWord");
+// 			checkblank(obj, '작성자')
+// 			subjectWordCount(obj, wordcheck);
+// 		}
 		//비밀번호 글자수 보여주기-------------
 		//키보드 입력시
-		password.oninput = function(){
+		password.oninput = function(e){
 			var obj = $("#password");
 			var wordcheck = $("#pwdWord");
 			var pwdAlert = $("#pwdAlert");
-			pwdCheck(obj, pwdAlert);
+// 			var myData = e.clipboardData.getData("text/plain").substr(0, obj.attr('maxlength'));
+			
 			checkblank(obj, '비밀번호')
 			subjectWordCount(obj, wordcheck);
+// 			pwdCheck(obj, pwdAlert, myData.length);
 		}
 		//복사 붙여넣기 할때
-		password.oncut = password.oncopy = password.onpaste = function(){
-			var obj = $("#password");
-			var wordcheck = $("#pwdWord");
-			var pwdAlert = $("#pwdAlert");
-			pwdCheck(obj, pwdAlert)
-			checkblank(obj, '비밀번호')
-			subjectWordCount(obj, wordcheck);
-		}
+// 		password.oncut = password.oncopy = password.onpaste = function(e){
+// 		password.onpaste = function(e){
+// 			var obj = $("#password");
+// 			var wordcheck = $("#pwdWord");
+// 			var pwdAlert = $("#pwdAlert");
+// 			var myData = e.clipboardData.getData("text/plain").substr(0, obj.attr('maxlength'));
+
+// 			console.log(myData);
+			
+// 			checkblank(obj, '비밀번호')
+// 			subjectWordCount(obj, wordcheck);
+// 			pwdCheck(obj, pwdAlert, myData.length);
+// 		}
 		
 		
 		
 		//글자수 보여주는 함수--------
 		function subjectWordCount(obj, wordcheck){
 			wordcheck.text(obj.val().length + "/" + obj.attr("maxlength"));
-			if(obj.val().length > obj.attr("maxlength")){
-				alert(obj.attr("maxlength")+"글자까지 입력 가능합니다.")
+			if(obj.val().length >= obj.attr("maxlength")){
+				setTimeout(function(){
+					alert(obj.attr("maxlength")+"글자까지 입력 가능합니다.")
+				}, 100);
 				obj.val(obj.val().substr(0, obj.attr("maxlength")));
 				wordcheck.text(obj.attr("maxlength") + "/" + obj.attr("maxlength"));
 			}
+			return obj.val().length;;
 		}
 		//공백 방지하는 함수------------
 		function checkblank(obj, title){
@@ -90,30 +100,40 @@
 			}
 		}
 		//비밀번호 유효성 검사 함수--------------
-		function pwdCheck(obj, pwdAlert){
+// 		function pwdCheck(obj, pwdAlert, clipboard){
+		function pwdCheck(){
+			console.log(clipboard)
 			var pw = $("#password").val();
 			var check = password.value.match(/([a-zA-Z0-9].*[!,@,#,$,%,^,&,*,?,_,~])|([!,@,#,$,%,^,&,*,?,_,~].*[a-zA-Z0-9])/);
 				
-			if(pw.length == 0){
-				pwdAlert.text("");
-				$("#pwdGo").css("display","none");
+			if(pw.length == 0 || clipboard == 0){
+// 				pwdAlert.text("");
+// 				$("#pwdGo").css("display","none");
+				return false;
 			}else if(pw.search(/\s/) != -1){
-				checkblank(obj, '비밀번호');
-				$("#pwdGo").css("display","none");
-			}else if(pw.length < 6){
-				pwdAlert.text("6자리 이상입력해주세요.");
-				$("#pwdGo").css("display","none");
+// 				checkblank(obj, '비밀번호');
+// 				$("#pwdGo").css("display","none");
+				return false;
+			}else if(pw.length < 6 || clipboard < 6){
+// 				pwdAlert.text("6자리 이상입력해주세요.");
+// 				alert("6자리 이상입력해주세요.");
+// 				$("#pwdGo").css("display","none");
+				return false;
 			}else if(!check){
-				pwdAlert.text("비밀번호는 문자, 숫자, 특수문자의 조합으로 6~10자리로 입력해주세요.");
+// 				pwdAlert.text("비밀번호는 문자, 숫자, 특수문자의 조합으로 6~10자리로 입력해주세요.");
+				alert("비밀번호는 문자, 숫자, 특수문자의 조합으로 6~10자리로 입력해주세요.");
 				$("#pwdGo").css("display","none");
-				if(pw.length >= 9){
-					alert("올바르지 않은 비밀번호입니다. 다시 확인해주세요");
-					obj.val('');
-				}
+// 				if(pw.length >= 9 || clipboard >= 9){
+// 					setTimeout(function(){
+// 						alert("올바르지 않은 비밀번호입니다. 다시 확인해주세요");
+// 					}, 100);
+// 				}
+				return false;
 		    }else{
 		    	$("#pwdGo").css("display",'inline-block')
 		    	pwdAlert.text("");
 		    }
+			
 		}
 		
 		//유효성 검사-----------------------
@@ -144,8 +164,21 @@
 				return false;
 			}
 			//비밀번호 유효성 검사
-			if($("#pwdGo").css('display') == 'none'){
-				alert("비밀번호를 확인해주세요.");
+			var check = password.value.match(/([a-zA-Z0-9].*[!,@,#,$,%,^,&,*,?,_,~])|([!,@,#,$,%,^,&,*,?,_,~].*[a-zA-Z0-9])/);
+			
+			if($("#password").val().length < 6){
+				alert("6자리 이상의 비밀번호를 입력하세요.")
+				$("#password").focus();
+				return false;
+			}
+			if($("#password").val().length >= 6 && !check){
+				console.log(check)
+				alert("비밀번호는 문자, 숫자, 특수문자의 조합으로 6~10자리로 입력해주세요.");
+				$("#password").focus();
+				return false;
+		    }
+			if(pw.search(/\s/) != -1){
+				alert("공백으로만 비밀번호를 설정할 수 없습니다. \n 영어, 숫자, 특수문자 조합 6~10자리 비밀번호를 설정해주세요.")
 				$("#password").focus();
 				return false;
 			}

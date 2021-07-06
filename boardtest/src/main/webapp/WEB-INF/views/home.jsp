@@ -97,7 +97,8 @@
 			<c:set var="recordNum" value="${totalRecord - ((page.currentPageNum-1) * page.onePageRecord)}"/>
 			<c:forEach var="vo" items="${list}">
 				<li>${recordNum}</li>
-				<li class="wordcut"><a href="boardView?boardNo=${vo.boardNo}"><c:out value="${vo.subject}"></c:out></a></li>
+<%-- 				<li class="wordcut"><pre><a href="boardView?boardNo=${vo.boardNo}">${vo.subject}</a></pre></li> --%>
+				<li class="wordcut"><a style="white-space: pre" href="boardView?boardNo=${vo.boardNo}"> <c:out value="${vo.subject}" escapeXml="true"></c:out></a></li>
 				<li><c:out value="${vo.userid}"></c:out></li>
 				<li>${vo.hit}</li>
 				<li>${vo.writedate}</li>

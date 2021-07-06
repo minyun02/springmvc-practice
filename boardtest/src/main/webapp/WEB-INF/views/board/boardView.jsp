@@ -67,6 +67,11 @@
 		padding: 0;
 		list-style: none;
 	}
+	#subjectView:focus {
+	    outline: none !important;
+	    border: none;
+/* 	    box-shadow: 0 0 10px #719ECE; */
+	}
 </style>
 </head>
 <body>
@@ -78,7 +83,7 @@
 			<li>작성자 : <span><c:out value="${vo.userid}"></c:out></span><li>
 <%-- 			<li>파일 : ${vo.filename}</li> --%>
 			<li>제목</li>	
-			<li style="width: 1000px; height: 30px; line-height: 30px; border:1px solid; word-break:break-all;"><c:out value="${vo.subject}"></c:out></li>
+			<li> <input id="subjectView" type="text" value="<c:out value="${vo.subject}"></c:out>" style="width: 1000px; height: 30px; line-height: 30px; border:1px solid; word-break:break-all;" readonly></li>
 			<li>내용</li>
 			<li>
 			<textarea id="content" style="width: 1000px; height: 300px; border:1px solid; word-break:break-all; overflow: auto;"><c:out value="${vo.content}"></c:out></textarea>
