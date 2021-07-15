@@ -98,7 +98,14 @@
 			<c:forEach var="vo" items="${list}">
 				<li>${recordNum}</li>
 <%-- 				<li class="wordcut"><pre><a href="boardView?boardNo=${vo.boardNo}">${vo.subject}</a></pre></li> --%>
-				<li class="wordcut"><a style="white-space: pre" href="boardView?boardNo=${vo.boardNo}"> <c:out value="${vo.subject}" escapeXml="true"></c:out></a></li>
+				<li class="wordcut">
+				<c:forEach var="i" begin="1" end="${vo.indent}">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				</c:forEach>
+				<c:if test="${vo.indent>0}">
+					▷
+				</c:if>
+				<a style="white-space: pre" href="boardView?boardNo=${vo.boardNo}"> <c:out value="${vo.subject}" escapeXml="true"></c:out></a></li>
 				<li><c:out value="${vo.userid}"></c:out></li>
 				<li>${vo.hit}</li>
 				<li>${vo.writedate}</li>
@@ -107,17 +114,21 @@
 			
 		</ul>
 		<div id="pagination">
-			<c:if test="${page.totalRecord != null && page.totalRecord != ''}">
-				<c:if test="${page.currentPageNum!=1}">
+			<c:if test="${page.totalRecord != null && page.totalRecord != ''}"><!-- 레코드가 없으면 첫페이지랑 < 안나와야한다 -->
+
+				<c:if test="${page.currentPageNum!=1}"><!--1페이지가 아닐때만 첫페이지 버튼이 필요하다 -->
 					<a href="/webapp/?currnetPageNum=1<c:if test="${page.searchWord != null && page.searchWord != ''}">&searchKey=${page.searchKey}&searchWord=${page.searchWord}</c:if>">첫페이지</a>
 				</c:if>
 					
-				<c:if test="${page.startPageNum!=1}">
+				<c:if test="${page.startPageNum!=1}"><!-- 시작페이지가 1이면 첫 페이지 세트이기때문에 페이지세트 이동 버튼이 필요없다 -->
 					<a href="/webapp/?currentPageNum=${page.startPageNum-1}<c:if test="${page.searchWord != null && page.searchWord != ''}">&searchKey=${page.searchKey}&searchWord=${page.searchWord}</c:if>">&lt;</a>
 				</c:if>
 			</c:if>
-			<c:forEach var="p" begin="${page.startPageNum}" end="${page.startPageNum+page.onePageNum-1}">
-				<c:if test="${p<=page.totalPage}">
+			<c:forEach var="p" begin="${page.startPageNum}" end="${page.startPageNum+page.onePageNum-1}"><!-- 반복문의 시작은 시작페이지부터 끝은 끝페이지를 계산해서 설정 -->
+			
+				<c:if test="${p<=page.totalPage}"> <!-- 예를 들어 총 레코드가 16개일때 페이지는 4까지만 보여줘야한다 하지만 반복문에서는 그런 설정이 없다. 
+				그래서 조건문으로 변수 p가 총페이지(마지막페이지)보다 같거나 작을때라는 조건을 걸어준다 -->
+					<!-- 만약에 p가 4가돼면 예에서 처럼 마지막페이지인 4와 같아지기때문에 반복문은 돌지만 끝 페이지인 5는 찍히지 않는다-->
 					<c:if test="${p==page.currentPageNum}">
 						<a class="on" href="/webapp/?currentPageNum=${p}<c:if test="${page.searchWord != null && page.searchWord != ''}">&searchKey=${page.searchKey}&searchWord=${page.searchWord}</c:if>">${p}</a>
 					</c:if>
@@ -128,7 +139,7 @@
 			</c:forEach>
 			
 			<c:if test="${page.totalRecord != null && page.totalRecord != ''}">
-				<c:if test="${page.totalPage > page.endPage}">
+				<c:if test="${page.totalPage > page.endPage}"><!-- 총페이지수가 한 페이지세트 끝번호보다 크면  -->
 					<a href="/webapp/?currentPageNum=${page.endPage+1}<c:if test="${page.searchWord != null && page.searchWord != ''}">&searchKey=${page.searchKey}&searchWord=${page.searchWord}</c:if>">&gt;</a>
 				</c:if>
 				

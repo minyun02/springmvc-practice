@@ -15,4 +15,7 @@ public interface BoardDAO {
 	public int boardEdit(BoardVO vo);
 	public int boardDelete(int boardNo);
 	public int updateHit(int boardNo);
+	public BoardVO getOriInfo(int boardNo);
+	public int replyInsert(BoardVO vo);
+	public int indentCount(BoardVO vo);
 }

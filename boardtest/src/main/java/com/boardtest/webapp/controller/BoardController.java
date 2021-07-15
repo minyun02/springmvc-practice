@@ -2,7 +2,12 @@ package com.boardtest.webapp.controller;
 
 import javax.inject.Inject;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -16,6 +21,9 @@ public class BoardController {
 	
 	@Inject
 	BoardService boardService;
+	
+	@Autowired
+	private DataSourceTransactionManager transactionManager;
 	
 	@RequestMapping("/boardView")
 	public ModelAndView boardView(int boardNo) {
@@ -92,6 +100,58 @@ public class BoardController {
 		}else {
 			mav.addObject("boardNo", boardNo);
 			mav.setViewName("redirect:boardView");
+		}
+		return mav;
+	}
+	
+	//답글 쓰기 폼 
+	@RequestMapping("/replyWrite")
+	public ModelAndView replyWrite(Integer boardNo) {
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("boardNo", boardNo);
+		mav.setViewName("/board/replyWrite");
+		return mav;
+	}
+	
+	//답글 쓰기
+	@RequestMapping(value =  "/replyWriteOk", method = RequestMethod.POST)
+	@Transactional(rollbackFor = {Exception.class, RuntimeException.class})
+	public ModelAndView replyWriteOk(BoardVO vo) {
+		//트랜잭션 객체 생성
+		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+		def.setPropagationBehavior(DefaultTransactionDefinition.PROPAGATION_REQUIRED);
+		
+		TransactionStatus status = transactionManager.getTransaction(def);
+		
+		ModelAndView mav = new ModelAndView();
+		System.out.println(vo.getContent());
+		System.out.println(vo.getBoardNo()+"AASDFSAF");
+		try {
+			//1. 원글의 정보 가져오기
+			BoardVO oriVo = boardService.getOriInfo(vo.getBoardNo());
+			//2. 해당 답글에 정보 추가
+			int indentCnt = boardService.indentCount(oriVo);
+			//2-1 원글번호를 그룹번호 넣어줌
+			vo.setGroupNo(oriVo.getGroupNo());
+			//2-2 그룹순서 정해주기
+			vo.setGroupOrder(oriVo.getGroupOrder()+1);
+			//2-3 들여쓰기 정해주기
+			vo.setIndent(oriVo.getIndent()+1);
+			
+			//답글 등록 메서드
+			int replyInsert = boardService.replyInsert(vo);
+			if(replyInsert>0) {//등록 성공
+				mav.setViewName("redirect:/");
+				transactionManager.commit(status);
+			}else {//실패
+				mav.setViewName("redirect:replyWrite");
+				transactionManager.rollback(status);
+			}
+		}catch(Exception e) {
+			mav.addObject("boardNo", vo.getBoardNo());
+			mav.setViewName("redirect:replyWrite");
+			System.out.println("답글 쓰기 에러 --- 롤백");
+			e.printStackTrace();
 		}
 		return mav;
 	}

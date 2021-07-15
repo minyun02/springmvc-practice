@@ -1,7 +1,7 @@
 package com.boardtest.webapp.vo;
 
 public class BoardVO {
-	private int boardNo;
+	private Integer boardNo;
 	private String subject;
 	private String content;
 	private String userid;
@@ -10,10 +10,15 @@ public class BoardVO {
 	private String filename;
 	private String writedate;
 	
-	public int getBoardNo() {
+	//답변
+	private int groupNo;
+	private int groupOrder;
+	private int indent;
+	
+	public Integer getBoardNo() {
 		return boardNo;
 	}
-	public void setBoardNo(int boardNo) {
+	public void setBoardNo(Integer boardNo) {
 		this.boardNo = boardNo;
 	}
 	public String getSubject() {
@@ -57,5 +62,23 @@ public class BoardVO {
 	}
 	public void setWritedate(String writedate) {
 		this.writedate = writedate;
+	}
+	public int getGroupNo() {
+		return groupNo;
+	}
+	public void setGroupNo(int groupNo) {
+		this.groupNo = groupNo;
+	}
+	public int getGroupOrder() {
+		return groupOrder;
+	}
+	public void setGroupOrder(int groupOrder) {
+		this.groupOrder = groupOrder;
+	}
+	public int getIndent() {
+		return indent;
+	}
+	public void setIndent(int indent) {
+		this.indent = indent;
 	}
 }

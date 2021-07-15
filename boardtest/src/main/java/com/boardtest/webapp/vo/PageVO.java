@@ -1,8 +1,11 @@
 package com.boardtest.webapp.vo;
 
+import org.apache.ibatis.type.Alias;
+
+@Alias("PageVO")
 public class PageVO {
 	private int onePageNum = 5; //한번에 보여질 페이지 수
-	private int onePageRecord = 5; //한 페이지당 레코드 수
+	private int onePageRecord = 10; //한 페이지당 레코드 수
 	
 	private int currentPageNum = 1; //현재페이지
 	private int startPageNum = 1; //시작페이지 번호

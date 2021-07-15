@@ -21,7 +21,6 @@
 	
 	function boardDelete(){
 		var locationUrl = "/webapp/boardDelete?boardNo=${vo.boardNo}";
-		
 		getPassword(locationUrl)
 	}
 	
@@ -91,7 +90,8 @@
 			</li>
 		</ul>
 		<a href="javascript:boardEdit()">수정</a>
-		<a href="javascript:boardDelete()">삭제</a><br>
+		<a href="javascript:boardDelete()">삭제</a>
+		<a href="replyWrite?boardNo=${vo.boardNo}">답글</a><br>
 		
 <!-- 		<form action=""> -->
 <!-- 			<textarea rows="4" cols="70"></textarea> -->

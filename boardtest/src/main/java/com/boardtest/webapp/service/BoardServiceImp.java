@@ -63,4 +63,22 @@ public class BoardServiceImp implements BoardService {
 		return dao.updateHit(boardNo);
 	}
 
+	@Override
+	public BoardVO getOriInfo(int boardNo) {
+		// 원글 정보 가져오기
+		return dao.getOriInfo(boardNo);
+	}
+
+	@Override
+	public int replyInsert(BoardVO vo) {
+		// 답글 등록하기
+		return dao.replyInsert(vo);
+	}
+
+	@Override
+	public int indentCount(BoardVO vo) {
+		// indent update
+		return dao.indentCount(vo);
+	}
+
 }
