@@ -217,6 +217,7 @@
 					tag += "</form></div>"
 					num--;
 				});
+				
 				$("#commentList").html(tag);
 			}, error : function(){
 				console.log("댓글 목록 로드 실패")
@@ -415,7 +416,7 @@
 		line-height: 26px;
 	}
 	.commentid, .commentPwd{
-		width: 265px;
+		width: 305px;
 		height: 40px;
 	}
 	.commentuserid{
