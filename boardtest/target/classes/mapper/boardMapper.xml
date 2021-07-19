@@ -10,13 +10,14 @@
 		select * from
 		    (select * from
 		        (select * from 
-		            (select boardNo, subject, content, userid, hit, to_char(writedate, 'YYYY-MM-DD') writedate, groupNo, groupOrder, indent from boardprac order by groupNo desc, groupOrder asc)
+		            (select boardNo, subject, content, userid, hit, to_char(writedate, 'YYYY-MM-DD') writedate, 
+		            groupNo, groupOrder, indent from boardprac order by groupNo desc, groupOrder asc)
 		        <if test="searchKey != null and searchKey != '' and searchWord != null and searchWord != ''"> where ${searchKey} like '%${searchWord}%'</if>)
-		    where <![CDATA[rownum <=]]>${currentPageNum * onePageRecord} order by GROUPNO desc)
+		    where <![CDATA[rownum <=]]>${currentPageNum * onePageRecord} order by rownum desc)
 		where <![CDATA[rownum <=]]>
 		<if test="currentPageNum==totalPage">${lastPageRecord}</if>
 		<if test="currentPageNum!=totalPage">${onePageRecord}</if>
-		order by GROUPNO DESC 
+		order by groupNo desc, groupOrder asc
 	</select>
 	<select id="getTotalRecord" parameterType="PageVO" resultType="int">
 		select count(boardNo) totalRecord from boardprac
@@ -48,6 +49,27 @@
 		values(testsq.nextval, #{subject}, #{content}, #{userid}, #{password}, ${groupNo}, ${groupOrder}, ${indent})
 	</insert>
 	<update id="indentCount" parameterType="BoardVO">
-		update boardprac set indent=indent+1 where groupNo=${groupNo} and indent>${indent}
+		update boardprac set groupOrder=groupOrder+1 where groupNo=${groupNo} and groupOrder>${groupOrder}
+	</update>
+	<insert id="commentInsert" parameterType="CommentVO">
+		insert into boardcomment(commentNo, boardNo, userid, password, content, cGroupNo)
+		values(commentsq.nextval, ${boardNo}, #{userid}, #{password}, #{content}, commentsq.currval)
+	</insert>
+	<select id="getCommentList" resultType="CommentVO">
+		select commentNo, userid, content, password, cGroupNo, cGroupOrder, cIndent 
+		from boardcomment where boardNo=${param1} order by commentNo desc
+	</select>
+	<select id="commentCheck" resultType="Integer">
+		select count(commentNo) from boardComment where commentNo=${param1} and password=#{param2}
+	</select>
+	<delete id="commentDel">
+		delete from boardcomment where commentNo=${param1}
+	</delete>
+	<select id="getCommentNum" resultType="Integer">
+		SELECT count(boardNo) FROM boardcomment WHERE boardNo=${param1}
+	</select>
+	<update id="commentEdit" parameterType="CommentVO">
+		update boardcomment set userid=#{userid}, password=#{password}, content=#{content}
+		where commentNo=${commentNo}
 	</update>
 </mapper>

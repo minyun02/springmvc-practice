@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.boardtest.webapp.dao.BoardDAO;
 import com.boardtest.webapp.vo.BoardVO;
+import com.boardtest.webapp.vo.CommentVO;
 import com.boardtest.webapp.vo.PageVO;
 
 @Service
@@ -79,6 +80,42 @@ public class BoardServiceImp implements BoardService {
 	public int indentCount(BoardVO vo) {
 		// indent update
 		return dao.indentCount(vo);
+	}
+
+	@Override
+	public int commentInsert(CommentVO cVo) {
+		// comment insert
+		return dao.commentInsert(cVo);
+	}
+
+	@Override
+	public List<CommentVO> getCommentList(int boardNo) {
+		// 댓글 목록 불러오기
+		return dao.getCommentList(boardNo);
+	}
+
+	@Override
+	public Integer commentCheck(int commentNo, String password) {
+		// 댓글 수정 삭제 비번 확인
+		return dao.commentCheck(commentNo, password);
+	}
+
+	@Override
+	public Integer commentDel(int commentNo) {
+		// 댓글 삭제
+		return dao.commentDel(commentNo);
+	}
+
+	@Override
+	public Integer getCommentNum(int boardNo) {
+		// 댓글 수 가져오기
+		return dao.getCommentNum(boardNo);
+	}
+
+	@Override
+	public Integer commentEdit(CommentVO cVo) {
+		// 댓글 수정
+		return dao.commentEdit(cVo);
 	}
 
 }

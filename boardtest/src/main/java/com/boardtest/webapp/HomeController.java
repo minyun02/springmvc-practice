@@ -1,5 +1,8 @@
 package com.boardtest.webapp;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 
 import org.springframework.stereotype.Controller;
@@ -21,10 +24,16 @@ public class HomeController {
 	public ModelAndView home(PageVO pVo) {
 		ModelAndView mav = new ModelAndView();
 		
-		System.out.println(pVo.getEndPage());
+		List<BoardVO> list = boardService.getList(pVo);
+		List<Integer> commentNum = new ArrayList<Integer>(); 
+		for(int i=0; i<list.size(); i++) {
+			commentNum.add(boardService.getCommentNum(list.get(i).getBoardNo()));
+		}
+		System.out.println(commentNum.get(0)+"====1 댓글 수 ");
 		pVo.setTotalRecord(boardService.getTotalRecord(pVo));
 		mav.addObject("totalRecord", pVo.getTotalRecord());
-		mav.addObject("list", boardService.getList(pVo));
+		mav.addObject("list", list);
+		mav.addObject("commentNum", commentNum);
 		mav.addObject("page", pVo);
 		mav.setViewName("home");
 		

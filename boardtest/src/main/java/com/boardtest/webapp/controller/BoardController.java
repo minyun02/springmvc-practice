@@ -1,5 +1,7 @@
 package com.boardtest.webapp.controller;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.boardtest.webapp.service.BoardService;
 import com.boardtest.webapp.vo.BoardVO;
+import com.boardtest.webapp.vo.CommentVO;
 
 @Controller
 public class BoardController {
@@ -29,10 +32,6 @@ public class BoardController {
 	public ModelAndView boardView(int boardNo) {
 		ModelAndView mav = new ModelAndView();
 		boardService.updateHit(boardNo);
-		
-		BoardVO vo = boardService.getSelectedRecord(boardNo);
-		System.out.println(vo.getSubject()+"???");
-		
 		
 		
 		mav.addObject("vo", boardService.getSelectedRecord(boardNo));
@@ -124,11 +123,12 @@ public class BoardController {
 		TransactionStatus status = transactionManager.getTransaction(def);
 		
 		ModelAndView mav = new ModelAndView();
-		System.out.println(vo.getContent());
-		System.out.println(vo.getBoardNo()+"AASDFSAF");
 		try {
 			//1. 원글의 정보 가져오기
 			BoardVO oriVo = boardService.getOriInfo(vo.getBoardNo());
+			System.out.println(oriVo.getGroupNo()+"groupno");
+			System.out.println(oriVo.getGroupOrder()+"grouporder");
+			System.out.println(oriVo.getIndent()+"indent");
 			//2. 해당 답글에 정보 추가
 			int indentCnt = boardService.indentCount(oriVo);
 			//2-1 원글번호를 그룹번호 넣어줌
@@ -154,5 +154,47 @@ public class BoardController {
 			e.printStackTrace();
 		}
 		return mav;
+	}
+	
+	//댓글 insert
+	@RequestMapping("/commentWriteOk")
+	@ResponseBody
+	public int commentWriteOk(CommentVO cVo) {
+		int result = boardService.commentInsert(cVo);
+		System.out.println("!@#!@#!@#");
+		return result;
+	}
+	
+	//댓글 목록 불러오기
+	@RequestMapping("/commentList")
+	@ResponseBody
+	public List<CommentVO> commentList(int boardNo){
+		return boardService.getCommentList(boardNo);
+	}
+	
+	//댓글 수정삭제 비번 확인
+	@RequestMapping("/commentCheck")
+	@ResponseBody
+	public Integer commentDel(int commentNo, String password) {
+		return boardService.commentCheck(commentNo, password);
+	}
+	
+	//댓글 삭제
+	@RequestMapping("/commentDel")
+	@ResponseBody
+	public Integer commentDel(int boardNo, int commentNo) {
+		return boardService.commentDel(commentNo);
+	}
+	
+	//댓글 수정
+	@RequestMapping("/commentEdit")
+	@ResponseBody
+	public Integer commentEdit(CommentVO cVo) {
+		System.out.println("boardno=>"+cVo.getBoardNo());
+		System.out.println("commentno=>"+cVo.getCommentNo());
+		System.out.println("userid=>"+cVo.getUserid());
+		System.out.println("password=>"+cVo.getPassword());
+		
+		return boardService.commentEdit(cVo);
 	}
 }

@@ -99,12 +99,6 @@
 		
 		//유효성 검사-----------------------
 		$("#writeForm").on("submit", ()=>{
-			//제목 공백 유효성
-			if($("#subject").val().trim()==""){
-				alert("제목을 입력하세요.")
-				$("#subject").focus();
-				return false;
-			}
 			//작성자 공백 유효성
 			if($("#userid").val().trim()==""){
 				alert("작성자를 입력하세요.")

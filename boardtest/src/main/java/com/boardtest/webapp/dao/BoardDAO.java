@@ -3,6 +3,7 @@ package com.boardtest.webapp.dao;
 import java.util.List;
 
 import com.boardtest.webapp.vo.BoardVO;
+import com.boardtest.webapp.vo.CommentVO;
 import com.boardtest.webapp.vo.PageVO;
 
 public interface BoardDAO {
@@ -18,4 +19,11 @@ public interface BoardDAO {
 	public BoardVO getOriInfo(int boardNo);
 	public int replyInsert(BoardVO vo);
 	public int indentCount(BoardVO vo);
+	public int commentInsert(CommentVO cVo);
+	public List<CommentVO> getCommentList(int boardNo);
+	public Integer commentCheck(int commentNo, String password);
+	public Integer commentDel(int commentNo);
+	public Integer getCommentNum(int boardNo);
+	public Integer commentEdit(CommentVO cVo);
+	
 }

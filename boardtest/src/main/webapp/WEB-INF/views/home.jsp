@@ -35,7 +35,7 @@
 		float: right;
 	}
 	#boardList{
-		height: 300px;
+		height: 500px;
 		text-align: center;
 	}
 	/* 게시판 요소 정렬 */
@@ -67,6 +67,7 @@
 	#selectBox{
 		height: 30px;
 	}
+	
 </style>
 </head>
 <body>
@@ -95,17 +96,18 @@
 			
 <%-- 											총 레코드 수 - ((현재 페이지-1)* 한 페이지 레코드 ) --%>
 			<c:set var="recordNum" value="${totalRecord - ((page.currentPageNum-1) * page.onePageRecord)}"/>
-			<c:forEach var="vo" items="${list}">
+			<c:forEach var="vo" items="${list}" varStatus="idx">
+				
 				<li>${recordNum}</li>
 <%-- 				<li class="wordcut"><pre><a href="boardView?boardNo=${vo.boardNo}">${vo.subject}</a></pre></li> --%>
 				<li class="wordcut">
 				<c:forEach var="i" begin="1" end="${vo.indent}">
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					&nbsp;&nbsp;&nbsp;&nbsp;
 				</c:forEach>
 				<c:if test="${vo.indent>0}">
-					▷
+					RE:&nbsp;
 				</c:if>
-				<a style="white-space: pre" href="boardView?boardNo=${vo.boardNo}"> <c:out value="${vo.subject}" escapeXml="true"></c:out></a></li>
+				<a style="white-space: pre" href="boardView?boardNo=${vo.boardNo}"> <c:out value="${vo.subject}" escapeXml="true"></c:out></a><span id="commentNum">&nbsp;[${commentNum[idx.index]}]</span></li>
 				<li><c:out value="${vo.userid}"></c:out></li>
 				<li>${vo.hit}</li>
 				<li>${vo.writedate}</li>
