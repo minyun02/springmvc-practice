@@ -26,7 +26,6 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/minyun/Desktop/bitcamp/library/ojdbc8.jar"/>
 	<classpathentry kind="lib" path="C:/Users/min/Downloads/library/ojdbc8.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

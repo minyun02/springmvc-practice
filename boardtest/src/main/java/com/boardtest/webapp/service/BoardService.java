@@ -20,10 +20,11 @@ public interface BoardService {
 	public int replyInsert(BoardVO vo);
 	public int indentCount(BoardVO vo);
 	public int commentInsert(CommentVO cVo);
-	public List<CommentVO> getCommentList(int boardNo);
+	public List<CommentVO> getCommentList(int boardNo, int currentPage, Integer totalPageNum, int lastPageCommentNum);
 	public Integer commentCheck(int commentNo, String password);
 	public Integer commentDel(int commentNo);
 	public Integer getCommentNum(int boardNo);
 	public Integer commentEdit(CommentVO cVo);
 	public Integer childCommentDelete(int boardNo);
+	public Integer getTotalCommentNum(int boardNo);
 }

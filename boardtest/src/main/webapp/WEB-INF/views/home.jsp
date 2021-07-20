@@ -41,18 +41,18 @@
 	/* 게시판 요소 정렬 */
 	#boardList li{
 		float: left;
-		width: 10%;
+		width: 8%;
 		height: 40px;
 		line-height: 40px;
 		border-bottom: 1px solid lightblue;
 	}
-	#boardList li:nth-child(5n+2){
+	#boardList li:nth-child(6n+2){
 		width: 50%;
 	}
 /* 	#boardList li:nth-child(5n+3){ */
 /* 		width: 12%; */
 /* 	} */
-	#boardList li:nth-child(5n+5){
+	#boardList li:nth-child(6n+6){
 		width: 15%;
 	}
 	.on{
@@ -90,6 +90,7 @@
 		<ul id="boardList">
 			<li>번호</li>
 			<li>제목</li>
+			<li>댓글</li>
 			<li>글쓴이</li>
 			<li>조회수</li>
 			<li>등록일</li>
@@ -107,7 +108,8 @@
 				<c:if test="${vo.indent>0}">
 					RE:&nbsp;
 				</c:if>
-				<a style="white-space: pre" href="boardView?boardNo=${vo.boardNo}&currentPage=1"> <c:out value="${vo.subject}" escapeXml="true"></c:out></a><span id="commentNum">&nbsp;[${commentNum[idx.index]}]</span></li>
+				<a style="white-space: pre" href="boardView?boardNo=${vo.boardNo}&currentPage=1"> <c:out value="${vo.subject}" escapeXml="true"></c:out></a></li>
+				<li><span id="commentNum">&nbsp;[${commentNum[idx.index]}]</span></li>
 				<li><c:out value="${vo.userid}"></c:out></li>
 				<li>${vo.hit}</li>
 				<li>${vo.writedate}</li>

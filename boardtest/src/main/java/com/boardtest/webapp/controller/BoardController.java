@@ -33,9 +33,11 @@ public class BoardController {
 	public ModelAndView boardView(int boardNo, int currentPage, CommentPageVO cpVo) {
 		ModelAndView mav = new ModelAndView();
 		boardService.updateHit(boardNo);
+		cpVo.setTotalCommentNum(boardService.getTotalCommentNum(boardNo));
 		
 		System.out.println(currentPage+"<--page");
 		mav.addObject("vo", boardService.getSelectedRecord(boardNo));
+		mav.addObject("cPage", cpVo);
 		mav.setViewName("/board/boardView");
 		return mav;
 	}
@@ -184,8 +186,13 @@ public class BoardController {
 	//댓글 목록 불러오기
 	@RequestMapping("/commentList")
 	@ResponseBody
-	public List<CommentVO> commentList(int boardNo){
-		return boardService.getCommentList(boardNo);
+	public List<CommentVO> commentList(int boardNo, int currentPage, Integer totalPageNum, int lastPageCommentNum){
+		List<CommentVO> list = boardService.getCommentList(boardNo, currentPage, totalPageNum, lastPageCommentNum);
+		System.out.println(currentPage+"???????????????"+totalPageNum+"!!!!!!!!!!!!"+lastPageCommentNum);
+		for(int i=0; i<list.size(); i++) {
+			System.out.println("commentNo"+i+"===>"+list.get(i).getCommentNo());
+		}
+		return list;
 	}
 	
 	//댓글 수정삭제 비번 확인
