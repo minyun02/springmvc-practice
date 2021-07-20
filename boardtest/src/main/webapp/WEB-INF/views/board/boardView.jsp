@@ -465,7 +465,7 @@
 </head>
 <body>
 	<div class="container">
-		<h3><a href="/webapp/">목록${cPage.totalPageNum}</a></h3>
+		<h3><a href="/webapp/">목록</a></h3>
 		<ul id="viewDetail">
 			<li style="float:left; margin-right: 50px;">글번호 : <span>${vo.boardNo}</span></li>
 			<li style="float:left; margin-right: 50px;">조회수 : <span>${vo.hit}</span></li>
