@@ -43,7 +43,7 @@ public class PageVO {
 		
 		//총 레코드수를 이용하여 총페이지를 계산
 		totalPage = (int)Math.ceil(totalRecord/(double)onePageRecord);
-		System.out.println("???");
+		
 		//마지막페이지 레코드 수
 		if(totalRecord % onePageRecord==0) {
 			lastPageRecord = onePageRecord;

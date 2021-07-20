@@ -23,14 +23,14 @@ public class HomeController {
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public ModelAndView home(PageVO pVo) {
 		ModelAndView mav = new ModelAndView();
-		pVo.setTotalRecord(boardService.getTotalRecord(pVo));
 		
 		List<BoardVO> list = boardService.getList(pVo);
 		List<Integer> commentNum = new ArrayList<Integer>(); 
 		for(int i=0; i<list.size(); i++) {
 			commentNum.add(boardService.getCommentNum(list.get(i).getBoardNo()));
 		}
-		
+		System.out.println(commentNum.get(0)+"====1 댓글 수 ");
+		pVo.setTotalRecord(boardService.getTotalRecord(pVo));
 		mav.addObject("totalRecord", pVo.getTotalRecord());
 		mav.addObject("list", list);
 		mav.addObject("commentNum", commentNum);

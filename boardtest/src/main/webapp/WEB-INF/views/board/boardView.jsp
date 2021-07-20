@@ -192,9 +192,9 @@
 	function replyList(){
 		$.ajax({
 			url : "/webapp/commentList",
-			data : "boardNo=${vo.boardNo}&currentPage=${cPage.currentPage}&totalPageNum=${cPage.totalPageNum}&lastPageCommentNum=${cPage.lastPageCommentNum}",
+			data : "boardNo=${vo.boardNo}",
 			success : function(result){
-				console.log(result)
+// 				console.log("댓글=>"+result.length)
 				var $result = $(result);
 				var tag = "";
 				var num = result.length;
@@ -365,7 +365,7 @@
 		//글자수 보여주는 함수--------
 		function subjectWordCount(obj, wordcheck){
 			wordcheck.text(obj.val().length + "/" + obj.attr("maxlength"));
-			if(obj.val().length >= obj.attr("maxlength")){
+			if(obj.val().length > obj.attr("maxlength")){
 				setTimeout(function(){
 					alert(obj.attr("maxlength")+"글자까지 입력 가능합니다.")		
 				}, 100);
@@ -386,7 +386,7 @@
 		//에디터 불러오기
 		$("#content").summernote({
   			width : 1000,
-  			height : 500,
+  			height : 300,
   			toolbar : []
   		});
 		$("#content").summernote('disable')
@@ -398,9 +398,6 @@
 		padding: 0;
 		list-style: none;
 	}
-	#userid{
-		margin-top: 15px;
-	}
 	#subjectView:focus {
 	    outline: none !important;
 	    border: none;
@@ -410,9 +407,9 @@
 		margin-top: 10px;
 	}
 	#commentSubmit{
-		height: 126px;
+		height: 87px;
 	    position: relative;
-	    top: -58px;
+	    top: -38px;
 	}
 	#commentList{
 		width: 1000px;
@@ -458,9 +455,7 @@
 	.contentWord{
 		margin-bottom: 30px;
 	}
-	.on{
-		font-weight: bold;
-	}
+	
 </style>
 </head>
 <body>
@@ -475,7 +470,7 @@
 			<li> <input id="subjectView" type="text" value="<c:out value="${vo.subject}"></c:out>" style="width: 1000px; height: 30px; line-height: 30px; border:1px solid; word-break:break-all;" readonly></li>
 			<li>내용</li>
 			<li>
-			<textarea id="content" style="width: 1000px; height: 500px; border:1px solid; word-break:break-all; overflow: auto;"><c:out value="${vo.content}"></c:out></textarea>
+			<textarea id="content" style="width: 1000px; height: 300px; border:1px solid; word-break:break-all; overflow: auto;"><c:out value="${vo.content}"></c:out></textarea>
 <%-- 			<c:out value="${vo.content}"></c:out> --%>
 			</li>
 		</ul>
@@ -489,24 +484,12 @@
 			<span id="useridWord">0/5</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			비밀번호 : <input id="password" type="password" name="password" maxlength="10">
 			<span id="pwdWord">0/10</span>
-			<textarea id="commentTextArea" name="content" rows="6" cols="130" maxlength="250"></textarea>
+			<textarea id="commentTextArea" name="content" rows="4" cols="130" maxlength="250"></textarea>
 			<input id="commentSubmit" type="submit" value="댓글작성">
 			<p id="contentWord">0/250</p>			
 		</form>
 		<h3>댓글</h3>
 		<div id="commentList"></div>
-		<div>
-			<c:forEach var="c" begin="${cPage.startPage}" end="${cPage.startPage + cPage.onePageNum-1}">
-				<c:if test="${c <= cPage.totalPageNum}">
-					<c:if test="${c==cPage.currentPage}">
-						<a class="on" href="/webapp/boardView?boardNo=${vo.boardNo}&currentPage=${c}">${c}</a>
-					</c:if>
-					<c:if test="${c!=cPage.currentPage}">
-						<a href="/webapp/boardView?boardNo=${vo.boardNo}&currentPage=${c}">${c}</a>
-					</c:if>
-				</c:if>
-			</c:forEach>
-		</div>
 	</div>
 </body>
 </html>

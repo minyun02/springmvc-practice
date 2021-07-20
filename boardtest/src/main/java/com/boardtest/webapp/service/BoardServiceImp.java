@@ -89,10 +89,9 @@ public class BoardServiceImp implements BoardService {
 	}
 
 	@Override
-	public List<CommentVO> getCommentList(int boardNo, int currentPage, Integer totalPageNum, int lastPageCommentNum) {
+	public List<CommentVO> getCommentList(int boardNo) {
 		// 댓글 목록 불러오기
-		System.out.println("lastPageCommentNum"+lastPageCommentNum);
-		return dao.getCommentList(boardNo, currentPage, totalPageNum, lastPageCommentNum);
+		return dao.getCommentList(boardNo);
 	}
 
 	@Override
@@ -123,12 +122,6 @@ public class BoardServiceImp implements BoardService {
 	public Integer childCommentDelete(int boardNo) {
 		// 원글 삭제시 댓글도 지우기
 		return dao.childCommentDelete(boardNo);
-	}
-
-	@Override
-	public Integer getTotalCommentNum(int boardNo) {
-		// 해당 글에 댓글이 몇개인지 찾아오기
-		return dao.getTotalCommentNum(boardNo);
 	}
 
 }
