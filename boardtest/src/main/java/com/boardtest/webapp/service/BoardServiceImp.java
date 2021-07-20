@@ -118,4 +118,10 @@ public class BoardServiceImp implements BoardService {
 		return dao.commentEdit(cVo);
 	}
 
+	@Override
+	public Integer childCommentDelete(int boardNo) {
+		// 원글 삭제시 댓글도 지우기
+		return dao.childCommentDelete(boardNo);
+	}
+
 }

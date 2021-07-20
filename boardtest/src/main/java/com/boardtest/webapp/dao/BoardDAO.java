@@ -25,5 +25,6 @@ public interface BoardDAO {
 	public Integer commentDel(int commentNo);
 	public Integer getCommentNum(int boardNo);
 	public Integer commentEdit(CommentVO cVo);
+	public Integer childCommentDelete(int boardNo);
 	
 }

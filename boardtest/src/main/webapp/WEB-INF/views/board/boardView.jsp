@@ -75,10 +75,11 @@
 		$(obj).parent().parent().next().css('display', 'block');
 		var pwdCount = $(obj).parent().parent().next().children().children().eq(3).children().val().length;
 		var idcount = $(obj).parent().parent().next().children().children().eq(4).children().val().length;
-		var contentcount = $(obj).parent().parent().next().children().children().eq(4).children().val().length;
-		console.log(pwdCount);
+		var contentcount = $(obj).parent().parent().next().children().children().eq(6).children().val().length;
+		console.log(contentcount);
 		$(obj).parent().parent().next().children().children().eq(3).children().next().text(pwdCount+"/10");
 		$(obj).parent().parent().next().children().children().eq(4).children().next().text(idcount+"/5");
+		$(obj).parent().parent().next().children().children().eq(6).children().next().text(contentcount+"/250");
 	}
 	//댓글 비번 확인=======================================
 	function commentCheck(url, data, state, location, obj){
@@ -98,7 +99,7 @@
 						}
 					}else{
 						alert("비밀번호를 다시 확인해주세요.")
-						commentCheck(url, data);
+						commentCheck(url, data, state, location, obj);
 					}
 				}, error : function(result){
 					
@@ -184,7 +185,6 @@
 			contentField.focus();
 			flag = false;
 		}
-		
 		return flag;
 	}
 	
@@ -204,13 +204,14 @@
 					tag += "<div class='commentid'> 작성자 : <input class='commentuserid' type='text' value='"+obj.userid+"' readonly></div>";
 					tag += "<div class='"+obj.commentNo+"'><button class='edit'>수정</button><button class='del'>삭제</button></div>";
 					tag += "<div class='commentContent' escapeXml='true'><xmp>"+obj.content+"</xmp></div>";
+					tag += "<div><input type='hidden' value='"+obj.password+"'/></div>";
 					tag += "</div>"
 					
 					tag += "<div class='editDiv' style='display:none;'><form class='editForm' method='post' onsubmit='return false'>"
 					tag += "<input type='hidden' name='boardNo' value='${vo.boardNo}'/>"
 					tag += "<input type='hidden' name='commentNo' value='"+obj.commentNo+"'/>"
 					tag += "<div class='commentNo'>"+num+"</div>";
-					tag += "<div class='commentPwd commentid'> 비밀번호 : <input class='editPwd' type='text' name='password' value='"+obj.password+"' maxlength='10'><span id='editPwdcheck'>0/10</span></div>";
+					tag += "<div class='commentPwd commentid'> 비밀번호 : <input class='editPwd' type='password' name='password' value='"+obj.password+"' maxlength='10'><span id='editPwdcheck'>0/10</span></div>";
 					tag += "<div class='commentid'> 작성자 : <input class='editid' type='text' name='userid' value='"+obj.userid+"' maxlength='5'><span id='editidcheck'>0/5</span></div>";
 					tag += "<div class='"+obj.commentNo+"'><button class='finish'>완료</button><button class='cancel' type='button'>취소</button></div>";
 					tag += "<div><textarea class='editContent' name='content' maxlength='250' wrap='hard'>"+obj.content+"</textarea><br><span id='contentWord'>0/250</span></div>";
@@ -294,9 +295,18 @@
 			}
 			return false;
 		});
-		//3-2 댓글 수정 취소
+		//3-2 댓글 수정 취소===========================================================================================
 		$(document).on('click','.cancel', function(){
 			if(confirm("댓글 수정을 취소하시겠습니까??")){
+				var oriUserid = $(this).parent().parent().parent().prev().children().eq(1).children().val();
+				var oriPwd = $(this).parent().parent().parent().prev().children().eq(4).children().val();
+				var oriContent = $(this).parent().parent().parent().prev().children().eq(3).text();
+// 				console.log("oriUserid="+oriUserid)
+// 				console.log("oriPwd="+oriPwd)
+// 				console.log("oriContent="+oriContent)
+				$(this).parent().prev().children().val(oriUserid); //작성자
+				$(this).parent().prev().prev().children().val(oriPwd); //비번
+				$(this).parent().next().children().val(oriContent); //내용
 				$(this).parent().parent().parent().css('display', 'none');
 				$(this).parent().parent().parent().prev().css('display', 'block');
 			}

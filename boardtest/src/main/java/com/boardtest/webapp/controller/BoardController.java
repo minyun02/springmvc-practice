@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.boardtest.webapp.service.BoardService;
 import com.boardtest.webapp.vo.BoardVO;
+import com.boardtest.webapp.vo.CommentPageVO;
 import com.boardtest.webapp.vo.CommentVO;
 
 @Controller
@@ -29,11 +30,11 @@ public class BoardController {
 	private DataSourceTransactionManager transactionManager;
 	
 	@RequestMapping("/boardView")
-	public ModelAndView boardView(int boardNo) {
+	public ModelAndView boardView(int boardNo, int currentPage, CommentPageVO cpVo) {
 		ModelAndView mav = new ModelAndView();
 		boardService.updateHit(boardNo);
 		
-		
+		System.out.println(currentPage+"<--page");
 		mav.addObject("vo", boardService.getSelectedRecord(boardNo));
 		mav.setViewName("/board/boardView");
 		return mav;
@@ -91,14 +92,30 @@ public class BoardController {
 	}
 	
 	@RequestMapping("/boardDelete")
+	@Transactional(rollbackFor = {Exception.class, RuntimeException.class})
 	public ModelAndView boardDelete(int boardNo) {
+		//트랜잭션 객체 생성
+		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+		def.setPropagationBehavior(DefaultTransactionDefinition.PROPAGATION_REQUIRED);
+		TransactionStatus status = transactionManager.getTransaction(def);	
+		
 		ModelAndView mav = new ModelAndView();
-		int deleteResult = boardService.boardDelete(boardNo);
-		if(deleteResult>0) {
-			mav.setViewName("redirect:/");
-		}else {
+		try {
+			int deleteResult = boardService.boardDelete(boardNo);
+			boardService.childCommentDelete(boardNo);
+			if(deleteResult>0) {
+				mav.setViewName("redirect:/");
+				transactionManager.commit(status);
+			}else {
+				mav.addObject("boardNo", boardNo);
+				mav.setViewName("redirect:boardView");
+				transactionManager.rollback(status);
+			}
+		}catch(Exception e) {
 			mav.addObject("boardNo", boardNo);
 			mav.setViewName("redirect:boardView");
+			System.out.println("글 지우기 삭제 에러 발생 -----롤백");
+			e.printStackTrace();
 		}
 		return mav;
 	}
@@ -161,7 +178,6 @@ public class BoardController {
 	@ResponseBody
 	public int commentWriteOk(CommentVO cVo) {
 		int result = boardService.commentInsert(cVo);
-		System.out.println("!@#!@#!@#");
 		return result;
 	}
 	

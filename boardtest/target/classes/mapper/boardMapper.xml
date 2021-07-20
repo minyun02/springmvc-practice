@@ -72,4 +72,7 @@
 		update boardcomment set userid=#{userid}, password=#{password}, content=#{content}
 		where commentNo=${commentNo}
 	</update>
+	<delete id="childCommentDelete">
+		delete from boardcomment where boardNo=${param1}
+	</delete>
 </mapper>

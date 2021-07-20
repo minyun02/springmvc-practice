@@ -107,7 +107,7 @@
 				<c:if test="${vo.indent>0}">
 					RE:&nbsp;
 				</c:if>
-				<a style="white-space: pre" href="boardView?boardNo=${vo.boardNo}"> <c:out value="${vo.subject}" escapeXml="true"></c:out></a><span id="commentNum">&nbsp;[${commentNum[idx.index]}]</span></li>
+				<a style="white-space: pre" href="boardView?boardNo=${vo.boardNo}&currentPage=1"> <c:out value="${vo.subject}" escapeXml="true"></c:out></a><span id="commentNum">&nbsp;[${commentNum[idx.index]}]</span></li>
 				<li><c:out value="${vo.userid}"></c:out></li>
 				<li>${vo.hit}</li>
 				<li>${vo.writedate}</li>
