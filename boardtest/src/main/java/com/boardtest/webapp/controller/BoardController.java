@@ -33,11 +33,9 @@ public class BoardController {
 	public ModelAndView boardView(int boardNo, int currentPage, CommentPageVO cpVo) {
 		ModelAndView mav = new ModelAndView();
 		boardService.updateHit(boardNo);
-		cpVo.setTotalCommentNum(boardService.getTotalCommentNum(boardNo));
 		
 		System.out.println(currentPage+"<--page");
 		mav.addObject("vo", boardService.getSelectedRecord(boardNo));
-		mav.addObject("cPage", cpVo);
 		mav.setViewName("/board/boardView");
 		return mav;
 	}
@@ -186,6 +184,7 @@ public class BoardController {
 	//댓글 목록 불러오기
 	@RequestMapping("/commentList")
 	@ResponseBody
+<<<<<<< HEAD
 	public List<CommentVO> commentList(int boardNo, int currentPage, Integer totalPageNum, int lastPageCommentNum){
 		List<CommentVO> list = boardService.getCommentList(boardNo, currentPage, totalPageNum, lastPageCommentNum);
 		System.out.println(currentPage+"<=현재페이지???????????????"+totalPageNum+"<=총페이지!!!!!!!!!!!!마지막레코드=>"+lastPageCommentNum);
@@ -193,6 +192,10 @@ public class BoardController {
 			System.out.println("commentNo"+i+"===>"+list.get(i).getCommentNo());
 		}
 		return list;
+=======
+	public List<CommentVO> commentList(int boardNo){
+		return boardService.getCommentList(boardNo);
+>>>>>>> branch 'master' of https://github.com/minyun02/springmvc-practice.git
 	}
 	
 	//댓글 수정삭제 비번 확인
