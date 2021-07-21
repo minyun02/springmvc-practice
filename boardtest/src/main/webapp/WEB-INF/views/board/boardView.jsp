@@ -203,7 +203,7 @@
 					tag += "<div class='commentNo'>"+num+"</div>";
 					tag += "<div class='commentid'> 작성자 : <input class='commentuserid' type='text' value='"+obj.userid+"' readonly></div>";
 					tag += "<div class='"+obj.commentNo+"'><button class='edit'>수정</button><button class='del'>삭제</button></div>";
-					tag += "<div class='commentContent' escapeXml='true'><xmp>"+obj.content+"</xmp></div>";
+					tag += "<div class='commentContent' escapeXml='true'>"+obj.content+"</div>";
 					tag += "<div><input type='hidden' value='"+obj.password+"'/></div>";
 					tag += "</div>"
 					
@@ -214,7 +214,7 @@
 					tag += "<div class='commentPwd commentid'> 비밀번호 : <input class='editPwd' type='password' name='password' value='"+obj.password+"' maxlength='10'><span id='editPwdcheck'>0/10</span></div>";
 					tag += "<div class='commentid'> 작성자 : <input class='editid' type='text' name='userid' value='"+obj.userid+"' maxlength='5'><span id='editidcheck'>0/5</span></div>";
 					tag += "<div class='"+obj.commentNo+"'><button class='finish'>완료</button><button class='cancel' type='button'>취소</button></div>";
-					tag += "<div><textarea class='editContent' name='content' maxlength='250' wrap='hard'>"+obj.content+"</textarea><br><span id='contentWord'>0/250</span></div>";
+					tag += "<div><textarea class='editContent' name='content' maxlength='250' wrap='hard'>"+obj.content+"</textarea><br><span class='editContentWord'>0/250</span></div>";
 					tag += "</form></div>"
 					num--;
 				});
@@ -416,10 +416,8 @@
 	}
 	#commentList{
 		width: 1000px;
-		margin-bottom: 100px;
 	}
 	.commentNo{
-/* 		margin: 0 620px 5px 0; */
 		border: 1px solid black;
 	}
 	.commentNo, .commentid{
@@ -431,6 +429,10 @@
 	.commentid, .commentPwd{
 		width: 305px;
 		height: 40px;
+	}
+	.editContentWord{
+		position: relative;
+	    top: -55px;
 	}
 	.commentuserid{
 		outline: none !important;
@@ -448,6 +450,7 @@
 		height: 150px;
 		overflow: auto;
 		padding: 10px;
+		overflow-x: auto;
 	}
 	xmp{
 		margin: 0;
@@ -455,11 +458,16 @@
 	.editid{
 		margin-right: 10px;
 	}
-	.contentWord{
+	#contentWord{
+		position: relative;
+		top: -55px;
 		margin-bottom: 30px;
 	}
 	.on{
 		font-weight: bold;
+	}
+	#pagingDiv{
+		margin-bottom: 100px;
 	}
 </style>
 </head>
@@ -495,17 +503,42 @@
 		</form>
 		<h3>댓글</h3>
 		<div id="commentList"></div>
-		<div>
-			<c:forEach var="c" begin="${cPage.startPage}" end="${cPage.startPage + cPage.onePageNum-1}">
-				<c:if test="${c <= cPage.totalPageNum}">
-					<c:if test="${c==cPage.currentPage}">
-						<a class="on" href="/webapp/boardView?boardNo=${vo.boardNo}&currentPage=${c}">${c}</a>
+		<div style="width: 1000px;">
+			<div id="pagingDiv">
+			
+				<c:if test="${cPage.totalCommentNum != null && cPage.totalCommentNum != ''}"><!-- 레코드가 없으면 첫페이지랑 < 안나와야한다 -->
+	
+					<c:if test="${cPage.currentPage!=1}"><!--1페이지가 아닐때만 첫페이지 버튼이 필요하다 -->
+						<a href="/webapp/boardView?boardNo=${vo.boardNo}&currentPage=1">첫페이지</a>
 					</c:if>
-					<c:if test="${c!=cPage.currentPage}">
-						<a href="/webapp/boardView?boardNo=${vo.boardNo}&currentPage=${c}">${c}</a>
+						
+					<c:if test="${cPage.startPage!=1}"><!-- 시작페이지가 1이면 첫 페이지 세트이기때문에 페이지세트 이동 버튼이 필요없다 -->
+						<a href="/webapp/boardView?boardNo=${vo.boardNo}&currentPage=${cPage.startPage-1}">&lt;</a>
 					</c:if>
 				</c:if>
-			</c:forEach>
+			
+				<c:forEach var="c" begin="${cPage.startPage}" end="${cPage.startPage + cPage.onePageNum-1}">
+					<c:if test="${c <= cPage.totalPageNum}">
+						<c:if test="${c==cPage.currentPage}">
+							<a class="on" href="/webapp/boardView?boardNo=${vo.boardNo}&currentPage=${c}">${c}</a>
+						</c:if>
+						<c:if test="${c!=cPage.currentPage}">
+							<a href="/webapp/boardView?boardNo=${vo.boardNo}&currentPage=${c}">${c}</a>
+						</c:if>
+					</c:if>
+				</c:forEach>
+				
+				<c:if test="${cPage.totalCommentNum != null && cPage.totalCommentNum != ''}">
+					<c:if test="${cPage.totalPageNum > cPage.endPage}"><!-- 총페이지수가 한 페이지세트 끝번호보다 크면  -->
+						<a href="/webapp/boardView?boardNo=${vo.boardNo}&currentPage=${cPage.endPage+1}">&gt;</a>
+					</c:if>
+					
+					<c:if test="${cPage.currentPage != cPage.totalPageNum}">
+						<a href="/webapp/boardView?boardNo=${vo.boardNo}&currentPage=${cPage.totalPageNum}">마지막페이지</a>
+					</c:if>
+				</c:if>	
+				
+			</div>
 		</div>
 	</div>
 </body>

@@ -188,7 +188,7 @@ public class BoardController {
 	@ResponseBody
 	public List<CommentVO> commentList(int boardNo, int currentPage, Integer totalPageNum, int lastPageCommentNum){
 		List<CommentVO> list = boardService.getCommentList(boardNo, currentPage, totalPageNum, lastPageCommentNum);
-		System.out.println(currentPage+"???????????????"+totalPageNum+"!!!!!!!!!!!!"+lastPageCommentNum);
+		System.out.println(currentPage+"<=현재페이지???????????????"+totalPageNum+"<=총페이지!!!!!!!!!!!!마지막레코드=>"+lastPageCommentNum);
 		for(int i=0; i<list.size(); i++) {
 			System.out.println("commentNo"+i+"===>"+list.get(i).getCommentNo());
 		}
